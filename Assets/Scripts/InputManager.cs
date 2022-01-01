@@ -34,7 +34,7 @@ public class InputManager : MonoBehaviour
 
     protected void Navigate(InputAction.CallbackContext context)
     {
-        InventoryManager.Navigate(context.control.displayName);
+        InventoryManager.Navigate(context.control.name);
     }
 
     protected void Select(InputAction.CallbackContext context)
