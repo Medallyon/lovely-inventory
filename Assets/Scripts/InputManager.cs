@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
+    [Required]
+    public InventoryManager InventoryManager;
+
     protected Actions_Default Actions { get; set; }
 
     private void OnEnable()
@@ -18,7 +22,7 @@ public class InputManager : MonoBehaviour
         Actions.Disable();
     }
 
-    void Awake()
+    protected void Awake()
     {
         Actions = new Actions_Default();
 
@@ -30,7 +34,7 @@ public class InputManager : MonoBehaviour
 
     protected void Navigate(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+        InventoryManager.Navigate(context.control.displayName);
     }
 
     protected void Select(InputAction.CallbackContext context)
