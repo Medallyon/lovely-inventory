@@ -44,7 +44,7 @@ public class InputManager : MonoBehaviour
 
     protected void Shuffle(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+        InventoryManager.ShuffleItems();
     }
 
     protected List<Resolution> AvailableResolutions { get; } = new List<Resolution>
