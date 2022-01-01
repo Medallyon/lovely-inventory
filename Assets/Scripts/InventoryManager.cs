@@ -20,7 +20,7 @@ public class InventoryManager : MonoBehaviour
         set
         {
             _selected = Mathf.Min(ItemGrid.childCount - 1, Mathf.Max(0, value));
-            SelectedMarker.transform.position = ItemGrid.GetChild(_selected).transform.position - new Vector3(9.2f, -9.2f, 0);
+            SelectedMarker.transform.SetParent(ItemGrid.GetChild(_selected), false);
         }
     }
 
@@ -42,9 +42,4 @@ public class InventoryManager : MonoBehaviour
         else if (controlName.Contains("right"))
             SelectedIndex++;
     }
-
-    [Button] private void NavLeft() => Navigate("left");
-    [Button] private void NavRight() => Navigate("right");
-    [Button] private void NavUp() => Navigate("up");
-    [Button] private void NavDown() => Navigate("down");
 }
