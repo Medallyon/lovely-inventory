@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public sealed class InventoryManager : MonoBehaviour
 {
     public InventoryItem this[int index] => ItemGrid.GetChild(index).GetComponent<InventoryItem>();
 
@@ -35,10 +35,10 @@ public class InventoryManager : MonoBehaviour
     {
         set => ActiveItemText.text = value;
     }
-    protected InventoryItem SelectedItem => ItemGrid.GetChild(SelectedIndex).GetComponent<InventoryItem>();
+    private InventoryItem SelectedItem => ItemGrid.GetChild(SelectedIndex).GetComponent<InventoryItem>();
 
     private int _selected;
-    protected int SelectedIndex
+    private int SelectedIndex
     {
         get => _selected;
         set
@@ -52,6 +52,11 @@ public class InventoryManager : MonoBehaviour
     [Header("Buttons")]
 
     private readonly System.Random _rnd = new System.Random();
+
+    private void Start()
+    {
+        ShuffleItems();
+    }
 
     [Button]
     private void SelectRandom()
