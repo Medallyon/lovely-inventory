@@ -10,6 +10,8 @@ public class InputManager : MonoBehaviour
     [Required]
     public InventoryManager InventoryManager;
 
+    public SO_ExtendedClip ResolutionClip;
+
     protected Actions_Default Actions { get; set; }
 
     private void OnEnable()
@@ -82,8 +84,6 @@ public class InputManager : MonoBehaviour
 
     protected void CycleResolution(InputAction.CallbackContext context)
     {
-        Debug.Log(context.control.name);
-
         // Player wants to lower resolution
         if (context.control.name.ToLower().Contains("left"))
         {
@@ -97,6 +97,12 @@ public class InputManager : MonoBehaviour
             {
                 Debug.LogWarning($"This display does not support {AvailableResolutions[CurrentResolutionIndex - 1]}.");
                 return;
+            }
+
+            if (ResolutionClip != null)
+            {
+                ResolutionClip.Pitch = new PitchRange { Min = .9f, Max = .9f };
+                InventoryManager.GetComponent<AudioSource>().PlayOneShot(ResolutionClip, AudioSourcePlayMode.Random);
             }
 
             CurrentResolutionIndex--;
@@ -115,6 +121,12 @@ public class InputManager : MonoBehaviour
             {
                 Debug.LogWarning($"This display does not support {AvailableResolutions[CurrentResolutionIndex + 1]}.");
                 return;
+            }
+
+            if (ResolutionClip != null)
+            {
+                ResolutionClip.Pitch = new PitchRange { Min = 1.1f, Max = 1.1f };
+                InventoryManager.GetComponent<AudioSource>().PlayOneShot(ResolutionClip, AudioSourcePlayMode.Random);
             }
 
             CurrentResolutionIndex++;

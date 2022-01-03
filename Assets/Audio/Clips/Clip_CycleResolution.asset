@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7b847822da9ff54bad85a72fad3a72e, type: 3}
-  m_Name: Clip_Typewriter
+  m_Name: Clip_CycleResolution
   m_EditorClassIdentifier: 
-  AudioClip: {fileID: 8300000, guid: 9df4c2e414fd7d847978300d2a2b0213, type: 3}
+  AudioClip: {fileID: 0}
   Volume:
-    Min: 0.02
-    Max: 0.05
+    Min: 0.15
+    Max: 0.15
   Pitch:
-    Min: 0.4
-    Max: 0.8
+    Min: 0.95
+    Max: 1.05
