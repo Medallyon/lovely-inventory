@@ -4,6 +4,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class InventoryManager : MonoBehaviour
 {
@@ -81,6 +82,28 @@ public sealed class InventoryManager : MonoBehaviour
             _selectedIndex = CurrentSlot.Selected ? CurrentIndex : -1;
             _selectedItem = CurrentSlot.Item;
             _inHolding = _selectedItem;
+
+            { // I would love to make the Slot background vibrate in colour, but it doesn't want to
+                //iTween.ColorTo(this[_selectedIndex].gameObject, iTween.Hash(
+                //    "name", "color_vibe",
+                //    "color", new Color(.5f, .5f, .5f),
+                //    "time", 1f,
+                //    "easetype", iTween.EaseType.easeInOutSine,
+                //    "looptype", iTween.LoopType.pingPong,
+                //    "includechildren", false
+                //));
+
+                this[_selectedIndex].GetComponent<Image>().CrossFadeColor(new Color(1, 0.79f, 0.79f), .5f, false, false);
+                this[_selectedIndex].ChildImage.CrossFadeAlpha(.5f, 1f, false);
+
+                iTween.ScaleTo(this[_selectedIndex].ChildImage.gameObject, iTween.Hash(
+                    "name", "scale_vibrate",
+                    "scale", new Vector3(.5f, .5f, .5f),
+                    "time", .5f,
+                    "easetype", iTween.EaseType.easeInOutCubic,
+                    "looptype", iTween.LoopType.pingPong
+                ));
+            }
         }
 
         else if (_selectedIndex > -1)
@@ -89,6 +112,13 @@ public sealed class InventoryManager : MonoBehaviour
             CurrentSlot.Selected = false;
 
             SpawnParticles();
+
+            // iTween.StopByName(this[_selectedIndex].gameObject, "color_vibe");
+            this[_selectedIndex].GetComponent<Image>().CrossFadeColor(new Color(1f, 1f, 1f), .25f, false, false);
+            this[_selectedIndex].ChildImage.CrossFadeAlpha(1f, .5f, false);
+
+            iTween.StopByName(this[_selectedIndex].ChildImage.gameObject, "scale_vibrate");
+            this[_selectedIndex].ChildImage.transform.localScale = new Vector3(.7f, .7f, .7f);
 
             _selectedIndex = -1;
             _selectedItem = null;

@@ -17,15 +17,12 @@ public class InventorySlot : MonoBehaviour
             _selected = value;
             if (!value)
             {
-                iTween.StopByName(ChildImage.gameObject, "selected");
-
-                ChildImage.SetAlpha(255);
                 ChildImage.transform.localRotation = Quaternion.identity;
+                iTween.StopByName(ChildImage.gameObject, "selected");
             }
 
             else
             {
-                ChildImage.SetAlpha(155);
                 ChildImage.transform.localRotation = Quaternion.Euler(0f, -45f, 0f);
                 iTween.RotateAdd(ChildImage.gameObject, iTween.Hash(
                     "name", "selected",
@@ -85,6 +82,9 @@ public class InventorySlot : MonoBehaviour
             return;
 
         ChildImage.transform.localScale = new Vector3(.001f, .001f, .001f);
+
+        if (iTween.tweens.Find(x => (string)x["name"] == "scale_vibrate") != null)
+            return;
 
         iTween.StopByName(ChildImage.gameObject, "spawn");
         iTween.ScaleTo(ChildImage.gameObject, iTween.Hash(
