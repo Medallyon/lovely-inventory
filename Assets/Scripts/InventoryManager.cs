@@ -44,7 +44,7 @@ public sealed class InventoryManager : MonoBehaviour
         get => _index;
         set
         {
-            _index = Mathf.Min(ItemGrid.childCount - 1, Mathf.Max(0, value));
+            _index = Mathf.Clamp(value, 0, ItemGrid.childCount - 1);
             SelectedMarker.transform.SetParent(ItemGrid.GetChild(_index), false);
             CurrentItemName = CurrentSlot.Item != null ? CurrentSlot.Item.Name : "";
         }
@@ -95,6 +95,7 @@ public sealed class InventoryManager : MonoBehaviour
             calculatedIndex--;
         else if (controlName.Contains("right"))
             calculatedIndex++;
+        calculatedIndex = Mathf.Clamp(calculatedIndex, 0, ItemGrid.childCount - 1);
 
         if (_selectedIndex > -1)
         {
@@ -112,8 +113,11 @@ public sealed class InventoryManager : MonoBehaviour
 
             newSlot.Item = _selectedItem;
 
-            newSlot.Selected = true;
-            CurrentSlot.Selected = false;
+            if (calculatedIndex != CurrentIndex)
+            {
+                newSlot.Selected = true;
+                CurrentSlot.Selected = false;
+            }
         }
 
         CurrentIndex = calculatedIndex;
