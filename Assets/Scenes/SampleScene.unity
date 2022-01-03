@@ -968,9 +968,9 @@ MonoBehaviour:
   ItemGrid: {fileID: 1375394146}
   ActiveItemText: {fileID: 576744888}
   Particles: {fileID: 83585161523321441, guid: 17e6d50f66fe56a4e855af9c9f29adfe, type: 3}
-  NavigateClip: {fileID: 8300000, guid: 99348d26b121bdf40bca2ff30b000207, type: 3}
-  SelectClip: {fileID: 8300000, guid: 70e02441ad3cd8f488092b6a4933e446, type: 3}
-  ShuffleClip: {fileID: 0}
+  NavigateClip: {fileID: 11400000, guid: 37ec2cb7b2a016a42a003b99bdbe1955, type: 2}
+  SelectClip: {fileID: 11400000, guid: 37db152640cad3d438c853f800e5770f, type: 2}
+  ShuffleClip: {fileID: 11400000, guid: 2b56243a9ac5eec46a451c415c8fdab1, type: 2}
   AvailableItems:
   - {fileID: 11400000, guid: 7b9ed771552c5254696e0633bcb0846c, type: 2}
   - {fileID: 11400000, guid: 1b078d7ce25dc344c9db00a2838e343c, type: 2}
