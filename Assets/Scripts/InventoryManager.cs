@@ -123,5 +123,8 @@ public sealed class InventoryManager : MonoBehaviour
         foreach (InventoryItem item in selected)
             item.Item = AvailableItems[Random.Range(0, AvailableItems.Count)];
         */
+
+        // Don't forget to call the setter to update the Item Text
+        SelectedIndex = SelectedIndex;
     }
 }
