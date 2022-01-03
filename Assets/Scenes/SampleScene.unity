@@ -966,7 +966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SelectedMarker: {fileID: 1563650058}
   ItemGrid: {fileID: 1375394146}
-  ActiveItemText: {fileID: 576744888}
+  ActiveItemText: {fileID: 576744890}
   Particles: {fileID: 83585161523321441, guid: 17e6d50f66fe56a4e855af9c9f29adfe, type: 3}
   NavigateClip: {fileID: 11400000, guid: 37ec2cb7b2a016a42a003b99bdbe1955, type: 2}
   SelectClip: {fileID: 11400000, guid: 37db152640cad3d438c853f800e5770f, type: 2}
@@ -1283,6 +1283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 576744887}
   - component: {fileID: 576744889}
+  - component: {fileID: 576744890}
   - component: {fileID: 576744888}
   m_Layer: 5
   m_Name: Item Name
@@ -1407,6 +1408,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 576744886}
   m_CullTransparentMesh: 1
+--- !u!114 &576744890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576744886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121a65868c6eb774b8db7f19e8135837, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextElement: {fileID: 576744888}
+  Enabled: 1
+  Dynamic: 0
+  TypingSpeed: 0.05
+  TypingClip: {fileID: 11400000, guid: bedc1d82887a18841aec5e29637c6b56, type: 2}
 --- !u!1 &610026661
 GameObject:
   m_ObjectHideFlags: 0

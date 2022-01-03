@@ -18,7 +18,7 @@ public sealed class InventoryManager : MonoBehaviour
     public Transform ItemGrid;
 
     [Required]
-    public TextMeshProUGUI ActiveItemText;
+    public Typewriter ActiveItemText;
 
     public ParticleSystem Particles;
 
@@ -41,7 +41,7 @@ public sealed class InventoryManager : MonoBehaviour
 
     public string CurrentItemName
     {
-        set => ActiveItemText.text = value;
+        set => ActiveItemText.Text = value;
     }
 
     private InventorySlot CurrentSlot => ItemGrid.GetChild(CurrentIndex).GetComponent<InventorySlot>();
@@ -119,10 +119,8 @@ public sealed class InventoryManager : MonoBehaviour
         { // Reset Selection
             this[_selectedIndex].Item = _inHolding;
 
-            { // Audio for Putting the Item down
-                Audio.pitch = SelectClip.Pitch.Random;
-                Audio.PlayOneShot(SelectClip.AudioClip);
-            }
+            // Audio for Putting the Item down
+            Audio.Play(SelectClip);
 
             SpawnParticles();
             ResetInventory();
@@ -173,10 +171,8 @@ public sealed class InventoryManager : MonoBehaviour
 
         CurrentIndex = calculatedIndex;
 
-        { // Audio for Navigating the Inventory
-            Audio.pitch = NavigateClip.Pitch.Random;
-            Audio.PlayOneShot(NavigateClip.AudioClip);
-        }
+        // Audio for Navigating the Inventory
+        Audio.Play(NavigateClip);
     }
 
     [Button]
@@ -186,10 +182,8 @@ public sealed class InventoryManager : MonoBehaviour
         // Clean up data in case we were in 'selection' mode
         ResetInventory();
 
-        { // Audio for Putting the Item down
-            Audio.pitch = ShuffleClip.Pitch.Random;
-            Audio.PlayOneShot(ShuffleClip.AudioClip);
-        }
+        // Audio for Putting the Item down
+        Audio.Play(ShuffleClip);
 
         amount = Mathf.Clamp(amount, 0, ItemGrid.childCount);
 
