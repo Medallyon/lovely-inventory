@@ -966,6 +966,7 @@ MonoBehaviour:
   SelectedMarker: {fileID: 1563650058}
   ItemGrid: {fileID: 1375394146}
   ActiveItemText: {fileID: 576744888}
+  Particles: {fileID: 83585161523321441, guid: 17e6d50f66fe56a4e855af9c9f29adfe, type: 3}
   AvailableItems:
   - {fileID: 11400000, guid: 7b9ed771552c5254696e0633bcb0846c, type: 2}
   - {fileID: 11400000, guid: 1b078d7ce25dc344c9db00a2838e343c, type: 2}

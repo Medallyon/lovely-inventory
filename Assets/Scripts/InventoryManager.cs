@@ -18,6 +18,8 @@ public sealed class InventoryManager : MonoBehaviour
     [Required]
     public TextMeshProUGUI ActiveItemText;
 
+    public ParticleSystem Particles;
+
     public List<SO_Item> AvailableItems = new List<SO_Item>();
 
     public List<InventorySlot> ItemSlots
@@ -85,6 +87,8 @@ public sealed class InventoryManager : MonoBehaviour
         { // Reset Selection
             this[_selectedIndex].Item = _inHolding;
             CurrentSlot.Selected = false;
+
+            SpawnParticles();
 
             _selectedIndex = -1;
             _selectedItem = null;
@@ -191,5 +195,28 @@ public sealed class InventoryManager : MonoBehaviour
 
         // Don't forget to call the setter to update the Item Text
         CurrentIndex = CurrentIndex;
+    }
+
+    private ParticleSystem SpawnParticles()
+    {
+        ParticleSystem particles = Instantiate(Particles, CurrentSlot.ChildImage.transform, true);
+
+        { // Adjust world position
+            Transform trans = particles.transform;
+            trans.localPosition = new Vector3(0, 0, -100);
+            trans.localScale = Vector3.one;
+        }
+
+        { // Calculate matching colors of the current Item and set them as the Particle System's startColor
+            var thief = new ColorThief.ColorThief();
+            var palette = thief.GetPalette((Texture2D) CurrentSlot.ChildImage.mainTexture);
+            var gradient = new ParticleSystem.MinMaxGradient(palette[Random.Range(0, palette.Count)].UnityColor,
+                palette[Random.Range(0, palette.Count)].UnityColor);
+
+            var main = particles.main;
+            main.startColor = gradient;
+        }
+
+        return particles;
     }
 }
