@@ -34,7 +34,19 @@ public class InputManager : MonoBehaviour
 
     protected void Navigate(InputAction.CallbackContext context)
     {
-        InventoryManager.Navigate(context.control.name);
+        Vector2 val = context.ReadValue<Vector2>();
+        string dir = string.Empty;
+
+        if (val.x >= .7f)
+            dir = "right";
+        else if (val.x <= -.7f)
+            dir = "left";
+        else if (val.y >= .7f)
+            dir = "up";
+        else if (val.y <= -.7f)
+            dir = "down";
+
+        InventoryManager.Navigate(dir);
     }
 
     protected void Select(InputAction.CallbackContext context)
@@ -69,8 +81,10 @@ public class InputManager : MonoBehaviour
 
     protected void CycleResolution(InputAction.CallbackContext context)
     {
+        Debug.Log(context.control.name);
+
         // Player wants to lower resolution
-        if (context.control.name.ToLower().Contains("left") || context.control.name.ToLower().Contains("q"))
+        if (context.control.name.ToLower().Contains("left"))
         {
             // Resolution is already the lowest available
             if (CurrentResolutionIndex == 0)
@@ -88,7 +102,7 @@ public class InputManager : MonoBehaviour
         }
 
         // Player wants to increase resolution
-        else if (context.control.name.ToLower().Contains("right") || context.control.name.ToLower().Contains("e"))
+        else if (context.control.name.ToLower().Contains("right"))
         {
             // Resolution is already the highest available
             if (CurrentResolutionIndex == AvailableResolutions.Count - 1)
