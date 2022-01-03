@@ -95,4 +95,9 @@ public class InventorySlot : MonoBehaviour
             "easetype", iTween.EaseType.easeOutElastic
         ));
     }
+
+    public override string ToString()
+    {
+        return Item != null ? Item.Name : base.ToString();
+    }
 }

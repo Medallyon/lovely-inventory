@@ -7,4 +7,9 @@ public class SO_Item : ScriptableObject
 {
     public string Name;
     public Sprite Sprite;
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }
