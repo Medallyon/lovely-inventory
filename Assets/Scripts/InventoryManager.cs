@@ -73,11 +73,22 @@ public sealed class InventoryManager : MonoBehaviour
 
     public void Select()
     {
-        if (CurrentSlot.Item != null)
-        {
+        if (_selectedIndex == -1 && CurrentSlot.Item != null)
+        { // Select the Item on the current Slot
             CurrentSlot.Selected = !CurrentSlot.Selected;
             _selectedIndex = CurrentSlot.Selected ? CurrentIndex : -1;
             _selectedItem = CurrentSlot.Item;
+            _inHolding = _selectedItem;
+        }
+
+        else if (_selectedIndex > -1)
+        { // Reset Selection
+            this[_selectedIndex].Item = _inHolding;
+            CurrentSlot.Selected = false;
+
+            _selectedIndex = -1;
+            _selectedItem = null;
+            _inHolding = null;
         }
     }
 
