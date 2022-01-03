@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Typewriter : MonoBehaviour
 {
@@ -46,14 +45,12 @@ public class Typewriter : MonoBehaviour
     }
 
     private Coroutine _activeCoroutine;
-    private bool _isTypingClipNotNull;
     private bool _isAudioClipNotNull;
     private AudioSource _audio;
 
     private void Start()
     {
-        _isTypingClipNotNull = TypingClip != null;
-        _isAudioClipNotNull = _isTypingClipNotNull && TypingClip.AudioClip != null;
+        _isAudioClipNotNull = TypingClip != null && TypingClip.AudioClip != null;
 
         _audio = GetComponent<AudioSource>();
         if (_isAudioClipNotNull && !_audio)
@@ -73,7 +70,7 @@ public class Typewriter : MonoBehaviour
 
             // Play a typing sound if available
             if (_isAudioClipNotNull)
-                _audio.Play(TypingClip);
+                _audio.PlayOneShot(TypingClip, AudioSourcePlayMode.Random);
 
             // Skip waiting on spaces
             if (letter != ' ')
