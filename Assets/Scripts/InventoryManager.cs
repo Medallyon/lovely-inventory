@@ -124,7 +124,11 @@ public sealed class InventoryManager : MonoBehaviour
                 ));
             }
 
-            { // Play this clip in reverse (I felt this sounded nicer the other way around)
+            if (this[_selectedIndex].Item.PickupClip != null)
+                Audio.PlayOneShot(this[_selectedIndex].Item.PickupClip, AudioSourcePlayMode.Random);
+
+            else
+            { // Play the default clip in reverse (I felt this sounded nicer the other way around)
                 Audio.clip = SelectClip.AudioClip;
                 Audio.pitch = -SelectClip.Pitch.Random;
                 Audio.timeSamples = SelectClip.AudioClip.samples - 1;
@@ -137,7 +141,9 @@ public sealed class InventoryManager : MonoBehaviour
             this[_selectedIndex].Item = _inHolding;
 
             // Audio for Putting the Item down
-            Audio.PlayOneShot(SelectClip, AudioSourcePlayMode.Random);
+            Audio.PlayOneShot(
+                this[_selectedIndex].Item.PutDownClip != null ? this[_selectedIndex].Item.PutDownClip : SelectClip,
+                AudioSourcePlayMode.Random);
 
             SpawnParticles();
             ResetInventory();

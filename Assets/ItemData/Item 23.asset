@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Energetic Potion
   Sprite: {fileID: 21300000, guid: b67d34401112a374cbee8b2730e8ffe3, type: 3}
+  PickupClip: {fileID: 11400000, guid: b09c7f3a9797cbf4caa439494079633b, type: 2}
+  PutDownClip: {fileID: 0}

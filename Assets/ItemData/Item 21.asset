@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Simple Potion
   Sprite: {fileID: 21300000, guid: 0e7ad30e680d02c42a326db3ee7a8da3, type: 3}
+  PickupClip: {fileID: 11400000, guid: b09c7f3a9797cbf4caa439494079633b, type: 2}
+  PutDownClip: {fileID: 0}
