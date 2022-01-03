@@ -8,7 +8,37 @@ public class InventorySlot : MonoBehaviour
     [SerializeField] private SO_Item _item;
     private Image _childImage;
 
-    protected Image ChildImage => _childImage != null ? _childImage : (transform.childCount == 0
+    private bool _selected;
+    public bool Selected
+    {
+        get => _selected;
+        set
+        {
+            _selected = value;
+            if (!value)
+            {
+                iTween.StopByName(ChildImage.gameObject, "selected");
+
+                ChildImage.SetAlpha(255);
+                ChildImage.transform.localRotation = Quaternion.identity;
+            }
+
+            else
+            {
+                ChildImage.SetAlpha(155);
+                ChildImage.transform.localRotation = Quaternion.Euler(0f, -45f, 0f);
+                iTween.RotateAdd(ChildImage.gameObject, iTween.Hash(
+                    "name", "selected",
+                    "y", 90f,
+                    "time", 1f,
+                    "easetype", iTween.EaseType.easeInOutSine,
+                    "looptype", iTween.LoopType.pingPong
+                ));
+            }
+        }
+    }
+
+    public Image ChildImage => _childImage != null ? _childImage : (transform.childCount == 0
         ? null
         : transform.GetChild(0).GetComponent<Image>());
 
@@ -28,9 +58,6 @@ public class InventorySlot : MonoBehaviour
             {
                 ChildImage.sprite = Item.Sprite;
                 ChildImage.enabled = true;
-
-                if (Application.isPlaying)
-                    PlaySpawnAnimation();
             }
         }
     }
@@ -46,8 +73,17 @@ public class InventorySlot : MonoBehaviour
         Item = Item;
     }
 
+    public void Spawn(SO_Item item)
+    {
+        Item = item;
+        PlaySpawnAnimation();
+    }
+
     private void PlaySpawnAnimation()
     {
+        if (!Application.isPlaying)
+            return;
+
         ChildImage.transform.localScale = new Vector3(.001f, .001f, .001f);
 
         iTween.StopByName(ChildImage.gameObject, "spawn");

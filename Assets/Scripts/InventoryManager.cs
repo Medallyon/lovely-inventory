@@ -15,6 +15,11 @@ public sealed class InventoryManager : MonoBehaviour
     [Required]
     public Transform ItemGrid;
 
+    [Required]
+    public TextMeshProUGUI ActiveItemText;
+
+    public List<SO_Item> AvailableItems = new List<SO_Item>();
+
     public List<InventorySlot> ItemSlots
     {
         get
@@ -26,28 +31,30 @@ public sealed class InventoryManager : MonoBehaviour
         }
     }
 
-    [Required]
-    public TextMeshProUGUI ActiveItemText;
-
-    public List<SO_Item> AvailableItems = new List<SO_Item>();
-
-    public string SelectedItemName
+    public string CurrentItemName
     {
         set => ActiveItemText.text = value;
     }
-    private InventorySlot SelectedItem => ItemGrid.GetChild(SelectedIndex).GetComponent<InventorySlot>();
 
-    private int _selected;
-    private int SelectedIndex
+    private InventorySlot CurrentSlot => ItemGrid.GetChild(CurrentIndex).GetComponent<InventorySlot>();
+
+    private int _index;
+    private int CurrentIndex
     {
-        get => _selected;
+        get => _index;
         set
         {
-            _selected = Mathf.Min(ItemGrid.childCount - 1, Mathf.Max(0, value));
-            SelectedMarker.transform.SetParent(ItemGrid.GetChild(_selected), false);
-            SelectedItemName = SelectedItem.Item != null ? SelectedItem.Item.Name : "";
+            _index = Mathf.Min(ItemGrid.childCount - 1, Mathf.Max(0, value));
+            SelectedMarker.transform.SetParent(ItemGrid.GetChild(_index), false);
+            CurrentItemName = CurrentSlot.Item != null ? CurrentSlot.Item.Name : "";
         }
     }
+
+    private int PreviousIndex { get; set; }
+
+    private int _selectedIndex = -1;
+    private SO_Item _selectedItem = null;
+    private SO_Item _inHolding = null;
 
     [Header("Buttons")]
 
@@ -59,28 +66,71 @@ public sealed class InventoryManager : MonoBehaviour
     }
 
     [Button]
-    private void SelectRandom()
+    private void SetRandomSelection()
     {
-        SelectedIndex = Random.Range(0, ItemGrid.childCount);
+        CurrentIndex = Random.Range(0, ItemGrid.childCount);
+    }
+
+    public void Select()
+    {
+        if (CurrentSlot.Item != null)
+        {
+            CurrentSlot.Selected = !CurrentSlot.Selected;
+            _selectedIndex = CurrentSlot.Selected ? CurrentIndex : -1;
+            _selectedItem = CurrentSlot.Item;
+        }
     }
 
     public void Navigate(string controlName)
     {
+        PreviousIndex = CurrentIndex;
         controlName = controlName.ToLower();
+
+        int calculatedIndex = CurrentIndex;
         if (controlName.Contains("up"))
-            SelectedIndex = SelectedIndex < 6 ? SelectedIndex : SelectedIndex - 6;
+            calculatedIndex = CurrentIndex < 6 ? CurrentIndex : CurrentIndex - 6;
         else if (controlName.Contains("down"))
-            SelectedIndex = SelectedIndex > 11 ? SelectedIndex : SelectedIndex + 6;
+            calculatedIndex = CurrentIndex > 11 ? CurrentIndex : CurrentIndex + 6;
         else if (controlName.Contains("left"))
-            SelectedIndex--;
+            calculatedIndex--;
         else if (controlName.Contains("right"))
-            SelectedIndex++;
+            calculatedIndex++;
+
+        if (_selectedIndex > -1)
+        {
+            InventorySlot oldSlot = this[_selectedIndex];
+            InventorySlot newSlot = this[calculatedIndex];
+            InventorySlot previousSlot = this[PreviousIndex];
+
+            previousSlot.Item = _inHolding;
+
+            _inHolding = newSlot.Item;
+            if (_inHolding != null)
+                oldSlot.Spawn(_inHolding);
+            else if (newSlot.Item == null)
+                oldSlot.Item = _selectedItem;
+
+            newSlot.Item = _selectedItem;
+
+            newSlot.Selected = true;
+            CurrentSlot.Selected = false;
+        }
+
+        CurrentIndex = calculatedIndex;
     }
 
     [Button]
     public void ShuffleItems() => ShuffleItems(5);
     public void ShuffleItems(int amount)
     {
+        { // Clean up data in case we were in 'selection' mode
+            _selectedIndex = -1;
+            _selectedItem = null;
+            _inHolding = null;
+
+            CurrentSlot.Selected = false;
+        }
+
         amount = Mathf.Clamp(amount, 0, ItemGrid.childCount);
 
         // Store this so that the expensive Getter isn't accessed over and over
@@ -92,7 +142,7 @@ public sealed class InventoryManager : MonoBehaviour
 
         // Evently select X slots and populate them with a random Item using a simple Linq expression
         foreach (InventorySlot item in slots.OrderBy(x => _rnd.Next()).Take(amount))
-            item.Item = AvailableItems[Random.Range(0, AvailableItems.Count)];
+            item.Spawn(AvailableItems[Random.Range(0, AvailableItems.Count)]);
 
         // Alternatively, use a less elegant approach that implements some form of Selection Sampling:
 
@@ -121,10 +171,10 @@ public sealed class InventoryManager : MonoBehaviour
 
         // Assign a random item to the selected slots
         foreach (InventoryItem item in selected)
-            item.Item = AvailableItems[Random.Range(0, AvailableItems.Count)];
+            item.Spawn(AvailableItems[Random.Range(0, AvailableItems.Count)]);
         */
 
         // Don't forget to call the setter to update the Item Text
-        SelectedIndex = SelectedIndex;
+        CurrentIndex = CurrentIndex;
     }
 }

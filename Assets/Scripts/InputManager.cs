@@ -39,7 +39,7 @@ public class InputManager : MonoBehaviour
 
     protected void Select(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+        InventoryManager.Select();
     }
 
     protected void Shuffle(InputAction.CallbackContext context)
