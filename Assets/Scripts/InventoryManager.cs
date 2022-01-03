@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(AudioSource))]
 public sealed class InventoryManager : MonoBehaviour
 {
     public InventorySlot this[int index] => ItemGrid.GetChild(index).GetComponent<InventorySlot>();
@@ -20,6 +21,10 @@ public sealed class InventoryManager : MonoBehaviour
     public TextMeshProUGUI ActiveItemText;
 
     public ParticleSystem Particles;
+
+    [FoldoutGroup("Audio")] public SO_ExtendedClip NavigateClip;
+    [FoldoutGroup("Audio")] public SO_ExtendedClip SelectClip;
+    [FoldoutGroup("Audio")] public SO_ExtendedClip ShuffleClip;
 
     public List<SO_Item> AvailableItems = new List<SO_Item>();
 
@@ -55,13 +60,19 @@ public sealed class InventoryManager : MonoBehaviour
 
     private int PreviousIndex { get; set; }
 
+    [Header("Buttons")]
+
     private int _selectedIndex = -1;
     private SO_Item _selectedItem = null;
     private SO_Item _inHolding = null;
-
-    [Header("Buttons")]
-
+    
+    private AudioSource Audio { get; set; }
     private readonly System.Random _rnd = new System.Random();
+
+    private void Awake()
+    {
+        Audio = GetComponent<AudioSource>();
+    }
 
     private void Start()
     {
@@ -77,22 +88,13 @@ public sealed class InventoryManager : MonoBehaviour
     public void Select()
     {
         if (_selectedIndex == -1 && CurrentSlot.Item != null)
-        { // Select the Item on the current Slot
+        { // Pick up the Item on the current Slot
             CurrentSlot.Selected = !CurrentSlot.Selected;
             _selectedIndex = CurrentSlot.Selected ? CurrentIndex : -1;
             _selectedItem = CurrentSlot.Item;
             _inHolding = _selectedItem;
 
-            { // I would love to make the Slot background vibrate in colour, but it doesn't want to
-                //iTween.ColorTo(this[_selectedIndex].gameObject, iTween.Hash(
-                //    "name", "color_vibe",
-                //    "color", new Color(.5f, .5f, .5f),
-                //    "time", 1f,
-                //    "easetype", iTween.EaseType.easeInOutSine,
-                //    "looptype", iTween.LoopType.pingPong,
-                //    "includechildren", false
-                //));
-
+            { // Play a simple animation to convey that the desired Item is in the "picked up" state
                 this[_selectedIndex].GetComponent<Image>().CrossFadeColor(new Color(1, 0.79f, 0.79f), .5f, false, false);
                 this[_selectedIndex].ChildImage.CrossFadeAlpha(.5f, 1f, false);
 
@@ -104,25 +106,26 @@ public sealed class InventoryManager : MonoBehaviour
                     "looptype", iTween.LoopType.pingPong
                 ));
             }
+
+            { // Play this clip in reverse (I felt this sounded nicer the other way around)
+                Audio.clip = SelectClip.AudioClip;
+                Audio.pitch = -SelectClip.Pitch.Random;
+                Audio.timeSamples = SelectClip.AudioClip.samples - 1;
+                Audio.Play();
+            }
         }
 
         else if (_selectedIndex > -1)
         { // Reset Selection
             this[_selectedIndex].Item = _inHolding;
-            CurrentSlot.Selected = false;
+
+            { // Audio for Putting the Item down
+                Audio.pitch = SelectClip.Pitch.Random;
+                Audio.PlayOneShot(SelectClip.AudioClip);
+            }
 
             SpawnParticles();
-
-            // iTween.StopByName(this[_selectedIndex].gameObject, "color_vibe");
-            this[_selectedIndex].GetComponent<Image>().CrossFadeColor(new Color(1f, 1f, 1f), .25f, false, false);
-            this[_selectedIndex].ChildImage.CrossFadeAlpha(1f, .5f, false);
-
-            iTween.StopByName(this[_selectedIndex].ChildImage.gameObject, "scale_vibrate");
-            this[_selectedIndex].ChildImage.transform.localScale = new Vector3(.7f, .7f, .7f);
-
-            _selectedIndex = -1;
-            _selectedItem = null;
-            _inHolding = null;
+            ResetInventory();
         }
     }
 
@@ -141,6 +144,9 @@ public sealed class InventoryManager : MonoBehaviour
         else if (controlName.Contains("right"))
             calculatedIndex++;
         calculatedIndex = Mathf.Clamp(calculatedIndex, 0, ItemGrid.childCount - 1);
+
+        if (CurrentIndex == calculatedIndex)
+            return;
 
         if (_selectedIndex > -1)
         {
@@ -166,18 +172,23 @@ public sealed class InventoryManager : MonoBehaviour
         }
 
         CurrentIndex = calculatedIndex;
+
+        { // Audio for Navigating the Inventory
+            Audio.pitch = NavigateClip.Pitch.Random;
+            Audio.PlayOneShot(NavigateClip.AudioClip);
+        }
     }
 
     [Button]
     public void ShuffleItems() => ShuffleItems(5);
     public void ShuffleItems(int amount)
     {
-        { // Clean up data in case we were in 'selection' mode
-            _selectedIndex = -1;
-            _selectedItem = null;
-            _inHolding = null;
+        // Clean up data in case we were in 'selection' mode
+        ResetInventory();
 
-            CurrentSlot.Selected = false;
+        { // Audio for Putting the Item down
+            Audio.pitch = ShuffleClip.Pitch.Random;
+            Audio.PlayOneShot(ShuffleClip.AudioClip);
         }
 
         amount = Mathf.Clamp(amount, 0, ItemGrid.childCount);
@@ -225,6 +236,24 @@ public sealed class InventoryManager : MonoBehaviour
 
         // Don't forget to call the setter to update the Item Text
         CurrentIndex = CurrentIndex;
+    }
+
+    private void ResetInventory()
+    {
+        if (_selectedIndex > -1)
+        {
+            this[_selectedIndex].GetComponent<Image>().CrossFadeColor(new Color(1f, 1f, 1f), .25f, false, false);
+            this[_selectedIndex].ChildImage.CrossFadeAlpha(1f, .5f, false);
+
+            iTween.StopByName(this[_selectedIndex].ChildImage.gameObject, "scale_vibrate");
+            this[_selectedIndex].ChildImage.transform.localScale = new Vector3(.7f, .7f, .7f);
+        }
+
+        _selectedIndex = -1;
+        _selectedItem = null;
+        _inHolding = null;
+
+        CurrentSlot.Selected = false;
     }
 
     private ParticleSystem SpawnParticles()
