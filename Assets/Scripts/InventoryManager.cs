@@ -111,11 +111,13 @@ public sealed class InventoryManager : MonoBehaviour
             _selectedItem = CurrentSlot.Item;
             _inHolding = _selectedItem;
 
-            { // Play a simple animation to convey that the desired Item is in the "picked up" state
-                this[_selectedIndex].GetComponent<Image>().CrossFadeColor(new Color(1, 0.79f, 0.79f), .5f, false, false);
-                this[_selectedIndex].ChildImage.CrossFadeAlpha(.5f, 1f, false);
+            var slot = this[_selectedIndex];
 
-                iTween.ScaleTo(this[_selectedIndex].ChildImage.gameObject, iTween.Hash(
+            { // Play a simple animation to convey that the desired Item is in the "picked up" state
+                slot.GetComponent<Image>().CrossFadeColor(new Color(1, 0.79f, 0.79f), .5f, false, false);
+                slot.ChildImage.CrossFadeAlpha(.5f, 1f, false);
+
+                iTween.ScaleTo(slot.ChildImage.gameObject, iTween.Hash(
                     "name", "scale_vibrate",
                     "scale", new Vector3(.5f, .5f, .5f),
                     "time", .5f,
@@ -124,8 +126,8 @@ public sealed class InventoryManager : MonoBehaviour
                 ));
             }
 
-            if (this[_selectedIndex].Item.PickupClip != null)
-                Audio.PlayOneShot(this[_selectedIndex].Item.PickupClip, AudioSourcePlayMode.Random);
+            if (slot.Item.PickupClip != null)
+                Audio.PlayOneShot(slot.Item.PickupClip, AudioSourcePlayMode.Random);
 
             else
             { // Play the default clip in reverse (I felt this sounded nicer the other way around)
@@ -138,12 +140,14 @@ public sealed class InventoryManager : MonoBehaviour
 
         else if (_selectedIndex > -1)
         { // Reset Selection
-            this[_selectedIndex].Item = _inHolding;
+            var slot = this[_selectedIndex];
+            slot.Item = _inHolding;
 
             // Audio for Putting the Item down
-            Audio.PlayOneShot(
-                this[_selectedIndex].Item.PutDownClip != null ? this[_selectedIndex].Item.PutDownClip : SelectClip,
-                AudioSourcePlayMode.Random);
+            if (slot.Item != null && slot.Item.PutDownClip != null)
+                Audio.PlayOneShot(slot.Item.PutDownClip, AudioSourcePlayMode.Random);
+            else
+                Audio.PlayOneShot(SelectClip, AudioSourcePlayMode.Random);
 
             SpawnParticles();
             ResetInventory();
