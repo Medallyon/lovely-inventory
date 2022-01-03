@@ -28,6 +28,9 @@ public class InventorySlot : MonoBehaviour
             {
                 ChildImage.sprite = Item.Sprite;
                 ChildImage.enabled = true;
+
+                if (Application.isPlaying)
+                    PlaySpawnAnimation();
             }
         }
     }
@@ -41,5 +44,19 @@ public class InventorySlot : MonoBehaviour
     {
         // Refresh Child Sprite by accessing the setter on itself
         Item = Item;
+    }
+
+    private void PlaySpawnAnimation()
+    {
+        ChildImage.transform.localScale = new Vector3(.001f, .001f, .001f);
+
+        iTween.StopByName(ChildImage.gameObject, "spawn");
+        iTween.ScaleTo(ChildImage.gameObject, iTween.Hash(
+            "name", "spawn",
+            "scale", new Vector3(.7f, .7f, .7f),
+            "delay", Random.Range(0f, .15f),
+            "time", 1,
+            "easetype", iTween.EaseType.easeOutElastic
+        ));
     }
 }
