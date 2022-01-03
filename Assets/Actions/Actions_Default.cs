@@ -80,6 +80,15 @@ public partial class @Actions_Default : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Quit"",
+                    ""type"": ""Button"",
+                    ""id"": ""ee56ca9e-d4e1-4413-80a4-a35e9cff4cb8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -390,6 +399,28 @@ public partial class @Actions_Default : IInputActionCollection2, IDisposable
                     ""action"": ""Cycle Resolution"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d822944c-440c-4595-91d1-5981f4d5dbf1"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0f79cc6-4b43-4171-bfe6-a0f3d91f1d32"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -465,6 +496,7 @@ public partial class @Actions_Default : IInputActionCollection2, IDisposable
         m_UI_CycleResolution = m_UI.FindAction("Cycle Resolution", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
+        m_UI_Quit = m_UI.FindAction("Quit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -530,6 +562,7 @@ public partial class @Actions_Default : IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_CycleResolution;
     private readonly InputAction m_UI_Submit;
     private readonly InputAction m_UI_Cancel;
+    private readonly InputAction m_UI_Quit;
     public struct UIActions
     {
         private @Actions_Default m_Wrapper;
@@ -540,6 +573,7 @@ public partial class @Actions_Default : IInputActionCollection2, IDisposable
         public InputAction @CycleResolution => m_Wrapper.m_UI_CycleResolution;
         public InputAction @Submit => m_Wrapper.m_UI_Submit;
         public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
+        public InputAction @Quit => m_Wrapper.m_UI_Quit;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -567,6 +601,9 @@ public partial class @Actions_Default : IInputActionCollection2, IDisposable
                 @Cancel.started -= m_Wrapper.m_UIActionsCallbackInterface.OnCancel;
                 @Cancel.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnCancel;
                 @Cancel.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnCancel;
+                @Quit.started -= m_Wrapper.m_UIActionsCallbackInterface.OnQuit;
+                @Quit.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnQuit;
+                @Quit.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnQuit;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -589,6 +626,9 @@ public partial class @Actions_Default : IInputActionCollection2, IDisposable
                 @Cancel.started += instance.OnCancel;
                 @Cancel.performed += instance.OnCancel;
                 @Cancel.canceled += instance.OnCancel;
+                @Quit.started += instance.OnQuit;
+                @Quit.performed += instance.OnQuit;
+                @Quit.canceled += instance.OnQuit;
             }
         }
     }
@@ -646,5 +686,6 @@ public partial class @Actions_Default : IInputActionCollection2, IDisposable
         void OnCycleResolution(InputAction.CallbackContext context);
         void OnSubmit(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
+        void OnQuit(InputAction.CallbackContext context);
     }
 }

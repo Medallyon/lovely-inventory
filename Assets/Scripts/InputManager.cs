@@ -30,6 +30,7 @@ public class InputManager : MonoBehaviour
         Actions.UI.Select.performed += Select;
         Actions.UI.Shuffle.performed += Shuffle;
         Actions.UI.CycleResolution.performed += CycleResolution;
+        Actions.UI.Quit.performed += Quit;
     }
 
     protected void Navigate(InputAction.CallbackContext context)
@@ -121,5 +122,14 @@ public class InputManager : MonoBehaviour
 
         Debug.Log($"Setting Resolution to {AvailableResolutions[CurrentResolutionIndex]}");
         CurrentResolution = AvailableResolutions[CurrentResolutionIndex];
+    }
+
+    private void Quit(InputAction.CallbackContext context)
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+#endif
     }
 }
