@@ -2,27 +2,30 @@ using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public interface IRandomRange
+public interface IRanges
 {
     public float Random { get; }
+    public float Average { get; }
 }
 
 [Serializable]
-public struct VolumeRange : IRandomRange
+public struct VolumeRange : IRanges
 {
     [Range(0f, 10f)] public float Min;
     [Range(0f, 10f)] public float Max;
 
     public float Random => UnityEngine.Random.Range(Min, Max);
+    public float Average => (Min + Max) / 2;
 }
 
 [Serializable]
-public struct PitchRange : IRandomRange
+public struct PitchRange : IRanges
 {
     [Range(-10f, 10f)] public float Min;
     [Range(-10f, 10f)] public float Max;
 
     public float Random => UnityEngine.Random.Range(Min, Max);
+    public float Average => (Min + Max) / 2;
 }
 
 [CreateAssetMenu(fileName = "Clip_", menuName = "Extended Audio Clip")]
