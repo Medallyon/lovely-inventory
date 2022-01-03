@@ -7,7 +7,7 @@ using UnityEngine;
 
 public sealed class InventoryManager : MonoBehaviour
 {
-    public InventoryItem this[int index] => ItemGrid.GetChild(index).GetComponent<InventoryItem>();
+    public InventorySlot this[int index] => ItemGrid.GetChild(index).GetComponent<InventorySlot>();
 
     [Required]
     public GameObject SelectedMarker;
@@ -15,13 +15,13 @@ public sealed class InventoryManager : MonoBehaviour
     [Required]
     public Transform ItemGrid;
 
-    public List<InventoryItem> ItemSlots
+    public List<InventorySlot> ItemSlots
     {
         get
         {
-            var slots = new List<InventoryItem>();
+            var slots = new List<InventorySlot>();
             for (int i = ItemGrid.childCount; i-- > 0;)
-                slots.Add(ItemGrid.GetChild(i).GetComponent<InventoryItem>());
+                slots.Add(ItemGrid.GetChild(i).GetComponent<InventorySlot>());
             return slots;
         }
     }
@@ -35,7 +35,7 @@ public sealed class InventoryManager : MonoBehaviour
     {
         set => ActiveItemText.text = value;
     }
-    private InventoryItem SelectedItem => ItemGrid.GetChild(SelectedIndex).GetComponent<InventoryItem>();
+    private InventorySlot SelectedItem => ItemGrid.GetChild(SelectedIndex).GetComponent<InventorySlot>();
 
     private int _selected;
     private int SelectedIndex
@@ -87,11 +87,11 @@ public sealed class InventoryManager : MonoBehaviour
         var slots = ItemSlots;
 
         // Clear every item slot first
-        foreach (InventoryItem slot in slots)
+        foreach (InventorySlot slot in slots)
             slot.Item = null;
 
         // Evently select X slots and populate them with a random Item using a simple Linq expression
-        foreach (InventoryItem item in slots.OrderBy(x => _rnd.Next()).Take(amount))
+        foreach (InventorySlot item in slots.OrderBy(x => _rnd.Next()).Take(amount))
             item.Item = AvailableItems[Random.Range(0, AvailableItems.Count)];
 
         // Alternatively, use a less elegant approach that implements some form of Selection Sampling:

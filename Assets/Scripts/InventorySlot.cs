@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryItem : MonoBehaviour
+public class InventorySlot : MonoBehaviour
 {
     [SerializeField] private SO_Item _item;
     private Image _childImage;
