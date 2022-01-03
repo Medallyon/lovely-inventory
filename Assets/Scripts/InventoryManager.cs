@@ -133,6 +133,7 @@ public sealed class InventoryManager : MonoBehaviour
             { // Play the default clip in reverse (I felt this sounded nicer the other way around)
                 Audio.clip = SelectClip.AudioClip;
                 Audio.pitch = -SelectClip.Pitch.Random;
+                Audio.volume = SelectClip.Volume.Random;
                 Audio.timeSamples = SelectClip.AudioClip.samples - 1;
                 Audio.Play();
             }
