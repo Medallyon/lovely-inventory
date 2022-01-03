@@ -150,7 +150,7 @@ public sealed class InventoryManager : MonoBehaviour
 
             previousSlot.Item = _inHolding;
 
-            _inHolding = newSlot.Item;
+            _inHolding = calculatedIndex == _selectedIndex ? _selectedItem : newSlot.Item;
             if (_inHolding != null)
                 oldSlot.Spawn(_inHolding);
             else if (newSlot.Item == null)
