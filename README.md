@@ -5,8 +5,9 @@ This Inventory prototype was made for specific eyes ONLY 👀
 ## Playing the game
 
 1. Download the [Submission Release](https://github.com/Medallyon/lovely-inventory/releases/tag/r4) ([Submission_Medallyon_x64.zip](https://github.com/Medallyon/lovely-inventory/releases/download/r4/Submission_Medallyon_x64.zip))
-2. Launch `LovelyInventory.exe`
-3. ~~Be amazed~~
+1. Extract the contents of the ZIP into a directory
+1. Launch `LovelyInventory.exe`
+1. ~~Be amazed~~
 
 ## Control Sheet
 
