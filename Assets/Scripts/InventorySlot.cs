@@ -81,7 +81,7 @@ public class InventorySlot : MonoBehaviour
         if (!Application.isPlaying)
             return;
 
-        ChildImage.transform.localScale = new Vector3(.001f, .001f, .001f);
+        ChildImage.transform.localScale = new Vector3(.0001f, .0001f, .0001f);
 
         if (iTween.tweens.Find(x => (string)x["name"] == "scale_vibrate") != null)
             return;
