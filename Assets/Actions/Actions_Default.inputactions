@@ -380,6 +380,28 @@
                 },
                 {
                     "name": "",
+                    "id": "6490ab0b-f550-4c2b-a2c4-87fc5f75d9b0",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Cycle Resolution",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb94adf4-58ac-4114-8618-b406a325c74a",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Cycle Resolution",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d822944c-440c-4595-91d1-5981f4d5dbf1",
                     "path": "<Gamepad>/start",
                     "interactions": "",

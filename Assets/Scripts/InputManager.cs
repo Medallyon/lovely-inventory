@@ -85,7 +85,7 @@ public class InputManager : MonoBehaviour
     protected void CycleResolution(InputAction.CallbackContext context)
     {
         // Player wants to lower resolution
-        if (context.control.name.ToLower().Contains("left"))
+        if (context.control.name.ToLower().Contains("left") || context.control.name.ToLower().Contains("q"))
         {
             // Resolution is already the lowest available
             if (CurrentResolutionIndex == 0)
@@ -109,7 +109,7 @@ public class InputManager : MonoBehaviour
         }
 
         // Player wants to increase resolution
-        else if (context.control.name.ToLower().Contains("right"))
+        else if (context.control.name.ToLower().Contains("right") || context.control.name.ToLower().Contains("e"))
         {
             // Resolution is already the highest available
             if (CurrentResolutionIndex == AvailableResolutions.Count - 1)
