@@ -55,6 +55,8 @@ public class InputManager : MonoBehaviour
         set => _currentResolutionIndex = Math.Min(AvailableResolutions.Count, Math.Max(0, value));
     }
 
+    #region Unity Methods
+
     private void OnEnable()
     {
         Actions.Enable();
@@ -123,6 +125,9 @@ public class InputManager : MonoBehaviour
             }
         }
     }
+
+    #endregion Unity Methods
+    #region Player Input Methods
 
     protected void Navigate(InputAction.CallbackContext context)
     {
@@ -213,4 +218,6 @@ public class InputManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+
+    #endregion Player Input Methods
 }
