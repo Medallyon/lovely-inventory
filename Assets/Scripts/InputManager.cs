@@ -32,6 +32,8 @@ public class InputManager : MonoBehaviour
         get => AvailableResolutions[CurrentResolutionIndex];
         set
         {
+            CurrentResolutionIndex = AvailableResolutions.FindIndex(res => res.width == value.width);
+
             Screen.SetResolution(value.width, value.height, Screen.fullScreen);
 
             if (!Screen.fullScreen)
@@ -81,7 +83,9 @@ public class InputManager : MonoBehaviour
                         AvailableResolutions.RemoveAt(i);
                 }
 
-                CurrentResolutionIndex = AvailableResolutions.Count - 1;
+                CurrentResolutionIndex = AvailableResolutions.FindIndex(res => res.width == Screen.currentResolution.width);
+                if (CurrentResolutionIndex == -1)
+                    CurrentResolution = AvailableResolutions[AvailableResolutions.Count - 1];
             }
 
             OnWindowed += () => { CanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; };
@@ -201,7 +205,7 @@ public class InputManager : MonoBehaviour
         CurrentResolution = AvailableResolutions[CurrentResolutionIndex];
     }
 
-    private void Quit(InputAction.CallbackContext context)
+    protected static void Quit(InputAction.CallbackContext context)
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.ExitPlaymode();
