@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f012dffe92b523f4095f9589f3c49807, type: 3}
   m_Name: Item 52
   m_EditorClassIdentifier: 
-  Name: Goob. He's your friend.
+  Name: Gloob. He's your friend.
   Sprite: {fileID: 21300000, guid: 656ef0660280c1945a7419c45b638abd, type: 3}
+  PickupClip: {fileID: 0}
+  PutDownClip: {fileID: 0}
